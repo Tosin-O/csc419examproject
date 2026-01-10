@@ -73,7 +73,7 @@ export default function ChatList({ onSelectChat, selectedChatId }: ChatListProps
   );
 
   return (
-    <div className="w-full md:w-[400px] h-full bg-[#1a1a1a] border-r border-white/10 flex flex-col">
+    <div className="w-full md:w-100 h-full bg-[#1a1a1a] border-r border-white/10 flex flex-col">
       {/* Header */}
       <div className="p-4 border-b border-white/10">
         {/* Search Bar */}

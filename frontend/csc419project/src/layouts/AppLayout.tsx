@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Collectives from "../components/Collectives";
 import NotificationSidebar from "../components/notifications/notificationSidebar";
-import MessagingPanel from "../components/messagingPanel";
+import MessagingPanel from "../components/messages/messagingPanel";
 
 export default function AppLayout() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -13,9 +13,18 @@ export default function AppLayout() {
     <div className="min-h-screen bg-dark text-white flex">
       
       <Sidebar
-        onNotificationClick={() => setIsNotificationOpen((prev) => !prev)}
-        onMessagingClick={() => setIsMessagingOpen((prev) => !prev)} 
-      />
+  isNotificationActive={isNotificationOpen}
+  isMessagingActive={isMessagingOpen}
+  onNotificationClick={() => {
+    setIsMessagingOpen(false);
+    setIsNotificationOpen((prev) => !prev);
+  }}
+  onMessagingClick={() => {
+    setIsNotificationOpen(false);
+    setIsMessagingOpen((prev) => !prev);
+  }}
+/>
+
 
       
       <NotificationSidebar

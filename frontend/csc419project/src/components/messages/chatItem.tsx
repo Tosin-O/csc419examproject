@@ -24,7 +24,7 @@ export default function ChatItem({ chat, isSelected, onClick }: ChatItemProps) {
     >
       <div className="flex gap-3">
         
-        <div className="relative flex-shrink-0">
+        <div className="relative shrink-0">
           <img
             src={chat.avatar}
             alt={chat.name}

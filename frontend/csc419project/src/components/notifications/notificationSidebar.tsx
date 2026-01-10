@@ -28,13 +28,13 @@ export default function NotificationSidebar({ isOpen, onClose }: Props) {
           bg-[#0f0f0f] border-r border-white/10 flex flex-col shadow-2xl
           transition-all duration-300 ease-in-out
           ${isOpen 
-            ? "translate-x-0 opacity-100 w-[420px]" 
+            ? "translate-x-0 opacity-100 w-105" 
             : "-translate-x-full opacity-0 w-0"
           }
         `}
       >
         {/* Inner Container */}
-        <div className="w-[420px] h-full flex flex-col">
+        <div className="w-105 h-full flex flex-col">
           
           {/* Header */}
           <div className="px-6 pt-6 pb-4 border-b border-white/10 flex justify-between items-center shrink-0">
