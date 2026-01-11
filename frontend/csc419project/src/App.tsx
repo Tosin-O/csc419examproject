@@ -11,7 +11,8 @@ import NewUser from "./pages/user-profiles/NewUser";
 import PostSignup from "./pages/auth/PostSignup";
 import ProfileLayout from "./layouts/ProfileLayout";
 import UserProfile from "./pages/user-profiles/Profile";
-
+import PostDetails from "./pages/PostDetails";
+import FriendsPage from "./pages/FriendsPage";
 
 export default function App() {
   return (
@@ -24,7 +25,6 @@ export default function App() {
       <Route path="/change-password" element={<ChangePassword />} />
       <Route path="/profile-setup" element={<ProfileSetup />} />
       <Route path="/post-signup" element={<PostSignup />} />
-      
 
       {/* User Profiles */}
       <Route element={<ProfileLayout />}>
@@ -35,6 +35,10 @@ export default function App() {
       <Route element={<AppLayout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/new-user" element={<NewUser />} />
+
+        <Route path="/post/:id" element={<PostDetails />} />
+        <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/search" element={<FriendsPage />} />
       </Route>
     </Routes>
   );

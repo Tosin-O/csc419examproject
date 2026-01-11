@@ -74,7 +74,7 @@ export default function UserProfile() {
             {/* --- DESKTOP LAYOUT (Hidden on Mobile) --- */}
             <div className="hidden md:flex flex-row justify-between items-center gap-4">
                {/* Name & Handle */}
-               <div className="flex flex-col shrink-0">
+              <div className="flex flex-col shrink-0">
                 <h1 className="text-3xl font-bold text-white leading-tight">
                   Oluwalonimi
                 </h1>

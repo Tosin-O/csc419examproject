@@ -36,7 +36,7 @@ export default function Sidebar({
 
   const navItems: NavItem[] = [
     { label: "Home", path: "/home", icon: Home },
-    { label: "Search", path: "/search", icon: Search },
+    { label: "Search", path: "/friends", icon: Search },
     {
       label: "Notification",
       icon: Bell,
