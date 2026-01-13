@@ -1,19 +1,44 @@
-import React, { useState, useRef } from "react";
-import logo from "../../assets/logo.svg"; // Replace with your logo path
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import logo from "../../assets/logo.svg";
+import { useNavigate, useLocation } from "react-router-dom";
+
+interface LocationState {
+  email?: string;
+}
+
+interface VerifyOtpResponse {
+  success?: boolean;
+  message?: string;
+  error?: string;
+}
+
+interface ForgotPasswordResponse {
+  message?: string;
+  error?: string;
+}
 
 export default function VerifyEmail() {
-const navigate = useNavigate();
-  const [code, setCode] = useState(Array(6).fill(""));
+  const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as LocationState;
+
+  const [email] = useState<string>(state?.email || "");
+  const [code, setCode] = useState<string[]>(Array(6).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [resendMessage, setResendMessage] = useState<string>("");
+
+  // Auto-focus first input
+  useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
 
   const handleChange = (value: string, index: number) => {
     if (/^\d*$/.test(value)) {
       const newCode = [...code];
       newCode[index] = value;
       setCode(newCode);
-
-      // Move to next input
       if (value && index < 5) {
         inputRefs.current[index + 1]?.focus();
       }
@@ -26,55 +51,99 @@ const navigate = useNavigate();
     }
   };
 
-  const handleVerify = () => {
-    const verificationCode = code.join("");
-    console.log("Verifying code:", verificationCode);
-    // TODO: call your API to verify
-    navigate("/home"); // navigate after verification
+  const handleVerify = async () => {
+    setError("");
+    const otp = code.join("");
+    if (otp.length < 6) {
+      setError("Please enter the 6-digit code");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/verify-reset-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      const data: VerifyOtpResponse = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Verification failed");
+      }
+
+      navigate("/change-password", { state: { email } });
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleResend = () => {
-    console.log("Resend code clicked");
-    // TODO: call API to resend code
+  const handleResend = async () => {
+    if (!email) return;
+    setError("");
+    setResendMessage("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data: ForgotPasswordResponse = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to resend code");
+      }
+
+      setResendMessage(data.message || "Verification code resent successfully!");
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-dark px-4">
       {/* Logo & Progress Indicator */}
       <div className="flex flex-col items-center absolute top-0 left-0 w-full pt-6 sm:pt-10">
+        <div className="flex items-center gap-3 mb-6">
+          <img src={logo} alt="gConnect Logo" className="w-12 h-12 sm:w-14 sm:h-14" />
+          <span className="text-3xl sm:text-4xl font-semibold tracking-wide text-white">gConnect</span>
+        </div>
 
-  {/* Logo and Text */}
-  <div className="flex items-center gap-3 mb-6">
-    <img src={logo} alt="gConnect Logo" className="w-12 h-12 sm:w-14 sm:h-14" />
-    <span className="text-3xl sm:text-4xl font-semibold tracking-wide text-white">gConnect</span>
-  </div>
-
-  {/* Progress Indicator */}
-  <div className="flex space-x-3">
-    <span className="w-10 h-1.5 rounded-full bg-white"></span>
-    <span className="w-10 h-1.5 rounded-full bg-orange-500"></span>
-    <span className="w-10 h-1.5 rounded-full bg-white"></span>
-  </div>
-</div>
-
+        <div className="flex space-x-3">
+          <span className="w-10 h-1.5 rounded-full bg-white"></span>
+          <span className="w-10 h-1.5 rounded-full bg-orange-500"></span>
+          <span className="w-10 h-1.5 rounded-full bg-white"></span>
+        </div>
+      </div>
 
       {/* Verification Text */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 mt-32">
         <h1 className="text-white text-2xl font-semibold mb-2">Verify your email</h1>
         <p className="text-gray-300">
-          We’ve sent a verification code to <span className="font-medium text-white">mail@example.com</span>
+          We’ve sent a verification code to{" "}
+          <span className="font-medium text-white">{email || "your email"}</span>
         </p>
       </div>
 
       {/* Code Input */}
-      <div className="flex gap-3 mb-6">
-        {code.map((num, idx) => (
+      <div className="flex gap-3 mb-4">
+        {code.map((_, idx) => (
           <input
             key={idx}
             type="text"
             maxLength={1}
-            value={num}
-            ref={(el) => (inputRefs.current[idx] = el)}
+            value={code[idx]}
+            ref={(el) => { inputRefs.current[idx] = el; }}
             onChange={(e) => handleChange(e.target.value, idx)}
             onKeyDown={(e) => handleKeyDown(e, idx)}
             className="w-12 h-12 text-center text-lg font-semibold rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -82,18 +151,26 @@ const navigate = useNavigate();
         ))}
       </div>
 
+      {/* Error / Resend Message */}
+      {error && <p className="text-red-500 text-sm mb-2 text-center">{error}</p>}
+      {resendMessage && <p className="text-green-500 text-sm mb-2 text-center">{resendMessage}</p>}
+
       {/* Verify Button */}
       <button
         onClick={handleVerify}
-        className="w-full max-w-xs bg-orange-500 hover:bg-orange-600 transition-colors text-white py-3 rounded-xl font-semibold mb-4"
+        disabled={loading}
+        className="w-full max-w-xs bg-orange-500 hover:bg-orange-600 transition-colors text-white py-3 rounded-xl font-semibold mb-4 disabled:opacity-50"
       >
-        Verify Account
+        {loading ? "Processing..." : "Verify Account"}
       </button>
 
       {/* Resend */}
       <p className="text-gray-400">
         Didn’t receive the code?{" "}
-        <span onClick={handleResend} className="text-orange-500 font-medium cursor-pointer">
+        <span
+          onClick={handleResend}
+          className="text-orange-500 font-medium cursor-pointer"
+        >
           Resend Code
         </span>
       </p>
