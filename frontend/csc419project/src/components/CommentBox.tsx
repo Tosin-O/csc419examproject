@@ -1,22 +1,30 @@
-// src/components/CommentBox.tsx
-
+import { useState, useEffect, useRef } from "react";
 
 export default function CommentBox() {
+  const [text, setText] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
-    <div className="w-full bg-[#121212] rounded-2xl border border-white/5 p-4 flex items-center gap-4">
-      {/* User Avatar - Static placeholder */}
-      <img
-        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Oluwalonimi"
-        className="w-9 h-9 rounded-full bg-gray-800"
-        alt="User"
+    <div className="mt-6 bg-[#252525] p-4 rounded-2xl border border-white/10 flex items-center gap-4 relative z-30">
+      <img src="/nimi.png" className="w-8 h-8 rounded-full" alt="me" />
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Post your reply"
+        className="flex-1 bg-[#1A1A1A] border border-white/5 rounded-xl py-2 px-4 text-white focus:outline-none focus:border-[#FF5C00] cursor-text pointer-events-auto"
       />
-
-      {/* Fake Input Area to match Figma Desktop-3 */}
-      <div className="flex-1 text-gray-500 text-sm">Leave a reply...</div>
-
-      {/* Static Post Button */}
-      <button className="text-orange-500 font-semibold text-sm hover:text-orange-400 transition-colors">
-        Post
+      <button
+        disabled={!text.trim()}
+        className="bg-[#FF5C00] px-5 py-2 rounded-xl text-sm font-bold text-white cursor-pointer relative z-40"
+      >
+        Reply
       </button>
     </div>
   );
