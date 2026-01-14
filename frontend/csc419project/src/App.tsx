@@ -16,7 +16,6 @@ import VerifyNewUser from "./pages/auth/VerifyNewUser";
 import FriendsPage from "./pages/SearchPage";
 import CreatePost from "./pages/CreatePost";
 import MainLayout from "./layouts/MainLayout";
-import Comments from "./components/Feed/PostDetails"
 import CollectivesCard from "./pages/CollectviesCard";
 import CollectivesPage from "./pages/CollectivesPage";
 import Comments from "./components/Feed/PostDetails";
@@ -55,11 +54,12 @@ export default function App() {
 
       <Route element={<MainLayout />}>
         <Route path="/home" element={<Home />} />
-        <Route path="/new-user" element={<NewUser />} />
+        
       </Route>
 
       {/* App */}
       <Route element={<AppLayout />}>
+      <Route path="/new-user" element={<NewUser />} />
         <Route path="/search" element={<FriendsPage />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/comments" element={<Comments />} />
