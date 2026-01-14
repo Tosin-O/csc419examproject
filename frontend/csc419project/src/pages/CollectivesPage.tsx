@@ -1,8 +1,7 @@
 import { Repeat2, MessageSquare, Heart } from "lucide-react";
-import { useNavigate } from "react-router-dom"; //
+import { Link } from "react-router-dom"; // Replace useNavigate with Link
 
 export default function CollectivesPage() {
-  const navigate = useNavigate(); //
 
   return (
     <div className="w-full min-h-screen bg-[#161718] text-white overflow-x-hidden">
@@ -33,12 +32,12 @@ export default function CollectivesPage() {
               </h1>
               <p className="text-gray-500 text-sm">@nimitimi</p>
 
-              <button
-                onClick={() => navigate("/create")} //
+              <Link
+                to="/create"
                 className="mt-6 w-full bg-[#FF5C00] text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-all text-center block shadow-lg shadow-orange-500/10"
               >
                 New Post
-              </button>
+              </Link>
             </div>
 
             {/* Meta Info: Hidden or shrunk on small mobile, aligned right on desktop */}
