@@ -21,6 +21,7 @@ import EventsPage from "./pages/EventsPage";
 import GeneralLayout from "./layouts/generalLayout";
 import MessageLayout from "./layouts/MessageLayout";
 import EventDetails from "./pages/EventDetails";
+import Settings from "./pages/user-profiles/Settings";
 
 export default function App() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
       <Route element={<GeneralLayout />}>
         <Route path="/events" element={<EventsPage />} />
         <Route path="/events/:id" element={<EventDetails />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
 
       <Route element={<MainLayout />}>
@@ -60,7 +62,7 @@ export default function App() {
         <Route path="/comments" element={<Comments />} />
       </Route>
 
-      {/* <Route path="/home" element={<Home />} /> */}
+     
     </Routes>
   );
 }
