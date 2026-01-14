@@ -19,6 +19,12 @@ import MainLayout from "./layouts/MainLayout";
 import Comments from "./components/Feed/PostDetails"
 import CollectivesCard from "./pages/CollectviesCard";
 import CollectivesPage from "./pages/CollectivesPage";
+import Comments from "./components/Feed/PostDetails";
+import EventsPage from "./pages/EventsPage";
+import GeneralLayout from "./layouts/generalLayout";
+import MessageLayout from "./layouts/MessageLayout";
+import EventDetails from "./pages/EventDetails";
+import Settings from "./pages/user-profiles/Settings";
 
 export default function App() {
   return (
@@ -38,6 +44,15 @@ export default function App() {
         <Route path="/profile" element={<UserProfile />} />
       </Route>
 
+       <Route path="/chats" element={<MessageLayout />} />
+
+
+      <Route element={<GeneralLayout />}>
+        <Route path="/events" element={<EventsPage />} />
+        <Route path="/events/:id" element={<EventDetails />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
+
       <Route element={<MainLayout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/new-user" element={<NewUser />} />
@@ -52,7 +67,7 @@ export default function App() {
          <Route path="/collectives/underrated-genius" element={<CollectivesPage />} /> 
       </Route>
 
-      {/* <Route path="/home" element={<Home />} /> */}
+     
     </Routes>
   );
 }
