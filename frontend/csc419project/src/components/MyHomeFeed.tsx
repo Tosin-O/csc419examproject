@@ -1,6 +1,6 @@
 // src/components/MyHomeFeed.tsx
-import { Repeat2, MessageSquare, Heart } from "lucide-react";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Repeat2, MessageSquare, Heart, Send } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const MOCK_POSTS = [
   {
@@ -24,8 +24,30 @@ const MOCK_POSTS = [
 export default function MyHomeFeed() {
   return (
     <div className="space-y-6">
+      {/* 1. TOP SECTION: Clickable bubble linked to Create Post Modal */}
+      <Link
+        to="/create"
+        className="flex items-center gap-4 bg-[#121212] p-4 rounded-2xl border border-white/5 hover:bg-[#1a1a1a] hover:border-white/10 transition-all cursor-pointer mb-8 group relative z-0"
+      >
+        <img
+          src="/nimi.png"
+          className="w-10 h-10 rounded-full border border-white/10 group-hover:scale-105 transition-transform"
+          alt="avatar"
+        />
+        <div className="flex-1">
+          <span className="text-gray-500 group-hover:text-gray-400 transition-colors">
+            What's on your mind, Oluwalonimi?
+          </span>
+        </div>
+        <div className="bg-[#FF5C00] p-2.5 rounded-xl text-white group-hover:bg-orange-600 transition-all">
+          <Send size={18} />
+        </div>
+      </Link>
+
+      {/* 2. FEED POSTS */}
       {MOCK_POSTS.map((post) => (
         <div key={post.id} className="group">
+          {/* Post Header */}
           <div className="flex gap-4 mb-3">
             <img
               src={post.avatar}
@@ -44,24 +66,25 @@ export default function MyHomeFeed() {
             <div className="rounded-2xl overflow-hidden border border-white/5 bg-[#121212]">
               <img
                 src={post.image}
-                className="w-full h-auto object-cover max-h-[450px]"
+                className="w-full h-auto object-cover max-h-112.5 cursor-pointer"
                 alt="post"
-                onClick={() => window.open(post.image, "_blank")} // Simple way to show "Media" task works
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(post.image, "_blank");
+                }}
               />
             </div>
 
-            {/* Interaction Bar - Forced Clickable Version */}
+            {/* 3. INTERACTION BAR - High Z-Index for guaranteed clickability */}
             <div className="flex gap-8 mt-4 text-gray-500 relative z-50">
-              {/* Repeat Icon */}
               <button className="transition-all duration-200 hover:text-[#FF5C00] cursor-pointer">
                 <Repeat2 size={19} />
               </button>
 
-              {/* Message Icon - THE LINK */}
               <Link
-                to="/post/1"
+                to={`/post/${post.id}`}
                 className="flex items-center gap-2 transition-all duration-200 hover:text-[#FF5C00] cursor-pointer group relative z-60"
-                style={{ display: "flex", minWidth: "44px", minHeight: "44px" }} // Ensures a large enough hit area
+                style={{ display: "flex", minWidth: "44px", minHeight: "44px" }}
               >
                 <MessageSquare
                   size={19}
@@ -70,7 +93,6 @@ export default function MyHomeFeed() {
                 <span className="text-xs font-medium">Reply</span>
               </Link>
 
-              {/* Heart Icon */}
               <button className="transition-all duration-200 hover:text-[#FF5C00] cursor-pointer">
                 <Heart size={19} />
               </button>
