@@ -6,10 +6,12 @@ import ErrorAlert from "../../components/ErrorAlert";
 type AuthMethod = "email" | "phone";
 
 interface LoginResponse {
-  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
   user?: {
     id: string;
     email?: string;
+    username?: string;
     phone?: string;
   };
   message?: string;
@@ -46,13 +48,17 @@ export default function Login() {
       });
 
       const data: LoginResponse = await res.json();
+      console.log("login response:", data);
 
       if (!res.ok) {
         throw new Error(data.message || "Login failed");
       }
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
+      if (data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+      }
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
       }
 
       navigate("/home");
@@ -70,7 +76,6 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-
         {/* LEFT SECTION */}
         <div className="space-y-4 max-w-md md:ml-6 mx-auto md:mx-0 text-center md:text-left">
           <div className="flex items-center justify-center md:justify-start gap-2 text-3xl font-semibold mb-4">
@@ -160,7 +165,6 @@ export default function Login() {
 
           {/* Error */}
           {error && <ErrorAlert message={error} />}
-
 
           {/* Login Button */}
           <button
