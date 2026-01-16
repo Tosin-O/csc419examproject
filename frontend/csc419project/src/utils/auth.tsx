@@ -1,28 +1,30 @@
 // src/utils/auth.ts
+
 export function getAuthHeader() {
-  const token = localStorage.getItem("accessToken"); // not "token"
+  // Check both common keys
+  const token = localStorage.getItem("accessToken") || localStorage.getItem("token");
+  
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 export function getCurrentUser() {
-  // 1) Try stored user (for future, when you add it)
   const rawUser = localStorage.getItem("user");
   if (rawUser) {
     try {
-      return JSON.parse(rawUser); // { id, email?, username? }
+      return JSON.parse(rawUser);
     } catch {
-      // ignore and fall back to token
+      // ignore
     }
   }
 
-  // 2) Fallback: decode id from JWT in accessToken (issued by faruqbackend)
-  const token = localStorage.getItem("accessToken");
+  // Check both keys here as well
+  const token = localStorage.getItem("accessToken") || localStorage.getItem("token");
   if (!token) return null;
 
   try {
     const [, payloadBase64] = token.split(".");
     const payloadJson = atob(payloadBase64);
-    const payload = JSON.parse(payloadJson); // { id, role, username, iat, exp }
+    const payload = JSON.parse(payloadJson);
 
     return {
       id: payload.id,
@@ -33,4 +35,3 @@ export function getCurrentUser() {
     return null;
   }
 }
-

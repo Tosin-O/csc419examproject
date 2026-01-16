@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+// src/components/Chat/ChatList.tsx
+import { useEffect, useState } from "react";
 import { Search, Plus, ChevronDown } from "lucide-react";
 import ChatItem from "./ChatItem";
 import { getAuthHeader } from "../../utils/auth";
@@ -38,48 +39,57 @@ export default function ChatList({
         const res = await fetch(`${API_BASE_URL}/api/chats`, {
           headers: {
             "Content-Type": "application/json",
-            ...getAuthHeader(),
+            ...getAuthHeader(), // This helper now checks for both 'accessToken' and 'token'
           },
         });
 
         if (!res.ok) {
-          console.error("Failed to load chats");
+          console.error("Failed to load chats - Status:", res.status);
           setLoading(false);
           return;
         }
 
         const data = await res.json();
 
-        // Map backend shape -> Chat interface; adjust field names to match your API
-        const mapped: Chat[] = data.map((c: any) => ({
-          id: String(c.id),
-          name:
-            c.other_user_email ??
-            c.otherUserEmail ??
-            c.otherUserName ??
-            "Unknown",
-          avatar: c.avatar ?? "https://i.pravatar.cc/150?img=1",
-          lastMessage: c.lastMessage ?? c.last_message_text ?? "",
-          timestamp:
-            c.lastMessageAt || c.last_message_at || c.last_message_time
-              ? new Date(
-                  c.lastMessageAt ??
-                    c.last_message_at ??
-                    c.last_message_time
-                ).toLocaleString("en-US", {
+        // Map backend shape -> Chat interface
+        const mapped: Chat[] = data.map((c: any) => {
+          // Determine the display name (Prioritize username)
+          const displayName = 
+            c.user?.username ?? 
+            c.username ?? 
+            c.other_user_username ?? 
+            c.other_user_email ?? 
+            "Unknown User";
+
+          // Determine the avatar (Prioritize profile_url/photoUrl)
+          const displayAvatar = 
+            c.user?.profile_url ?? 
+            c.profile_url ?? 
+            c.user?.photoUrl ?? 
+            c.photoUrl ?? 
+            `https://api.dicebear.com/7.x/initials/svg?seed=${displayName}`;
+
+          return {
+            id: String(c.id),
+            name: displayName,
+            avatar: displayAvatar,
+            lastMessage: c.lastMessage ?? c.last_message_text ?? "",
+            timestamp: (c.lastMessageAt || c.last_message_at || c.last_message_time)
+              ? new Date(c.lastMessageAt ?? c.last_message_at ?? c.last_message_time).toLocaleString("en-US", {
                   hour: "2-digit",
                   minute: "2-digit",
                   month: "short",
                   day: "2-digit",
                 })
               : "",
-          unread: c.unreadCount ?? c.unread_count ?? 0,
-          online: c.online ?? c.is_online ?? false,
-        }));
+            unread: c.unreadCount ?? c.unread_count ?? 0,
+            online: c.online ?? c.is_online ?? false,
+          };
+        });
 
         setChats(mapped);
       } catch (err) {
-        console.error(err);
+        console.error("Fetch chats error:", err);
       } finally {
         setLoading(false);
       }
@@ -124,7 +134,6 @@ export default function ChatList({
             className="bg-orange-500 hover:bg-orange-600 p-2 rounded-lg transition"
             type="button"
             onClick={() => {
-              console.log("ORANGE PLUS CLICKED");
               onSelectChat(null); // show empty ChatWindow state
             }}
           >

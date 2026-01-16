@@ -1,20 +1,19 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, Camera } from 'lucide-react';
+import { ChevronDown, Github } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Settings() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    userName: '',
-    gender: 'Female', // Note: Check if your backend supports Gender/Username updates
+    username: '',
     bio: '',
-    privacySetting: 'PUBLIC', // Matches Screenshot (517) options: PUBLIC/PRIVATE
-    photoUrl: ''
+    github: '',
+    privacy: 'PUBLIC'
   });
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Fetch current profile data on mount - Based on Screenshot (514)
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
@@ -25,14 +24,14 @@ export default function Settings() {
         const data = await res.json();
         if (res.ok) {
           setFormData({
-            ...formData,
+            username: data.user?.username || '', 
             bio: data.bio || '',
-            privacySetting: data.privacy || 'PUBLIC',
-            photoUrl: data.photoUrl || ''
+            github: data.links?.github || '',
+            privacy: data.privacy || 'PUBLIC'
           });
         }
       } catch (err) {
-        console.error("Failed to load settings", err);
+        console.error("Fetch error:", err);
       }
     };
     fetchProfile();
@@ -43,115 +42,94 @@ export default function Settings() {
   };
 
   const handlePrivacySelect = (option: string) => {
-    setFormData(prev => ({ ...prev, privacySetting: option.toUpperCase() }));
+    setFormData(prev => ({ ...prev, privacy: option.toUpperCase() }));
     setIsDropdownOpen(false);
   };
 
-  // Handle Photo Update - Based on Screenshot (516)
-  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      const token = localStorage.getItem("token");
-      const file = e.target.files[0];
-      const data = new FormData();
-      data.append("photo", file);
-
-      try {
-        const res = await fetch("http://localhost:5000/api/profile/photo", {
-          method: "POST",
-          headers: { "Authorization": `Bearer ${token}` },
-          body: data
-        });
-        if (res.ok) {
-          // Refresh photo preview locally
-          setFormData(prev => ({ ...prev, photoUrl: URL.createObjectURL(file) }));
-        }
-      } catch (err) {
-        console.error("Photo upload failed", err);
-      }
-    }
-  };
-
-  // Save Bio and Privacy - Based on Screenshot (517)
-  const handleSaveChanges = async () => {
+  const handleSaveChanges = async (e: React.MouseEvent) => {
+    e.preventDefault();
     setLoading(true);
+    
     const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Session expired. Please log in.");
+      setLoading(false);
+      return;
+    }
+
     try {
+      const payload = {
+        username: formData.username,
+        bio: formData.bio,
+        links: { github: formData.github },
+        privacy: formData.privacy
+      };
+
       const res = await fetch("http://localhost:5000/api/profile/", {
-        method: "POST",
+        method: "PUT",
         headers: { 
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}` 
         },
-        body: JSON.stringify({
-          bio: formData.bio,
-          privacy: formData.privacySetting
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
-        alert("Settings updated successfully!");
+        navigate("/profile"); 
+      } else {
+        const result = await res.json();
+        alert(`Error: ${result.message || "Update failed"}`);
       }
     } catch (err) {
-      console.error("Update failed", err);
+      console.error("Network error:", err);
+      alert("Failed to connect to server.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-dark min-h-screen text-white p-10 md:p-20">
+    <div className="bg-dark min-h-screen text-white p-6 md:p-20">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl font-semibold mb-12">Settings</h1>
 
-        {/* Profile Header with Photo Upload */}
-        <div className="flex items-center gap-5 mb-12">
-          <div className="relative group w-16 h-16 rounded-full overflow-hidden">
-             <img 
-              src={formData.photoUrl || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150"} 
-              alt="Profile" 
-              className="w-full h-full object-cover"
-            />
-            <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
-              <Camera size={20} />
-              <input type="file" className="hidden" onChange={handlePhotoChange} accept="image/*" />
-            </label>
-          </div>
-          <div>
-            <h2 className="text-xl font-medium">{formData.name || "User"}</h2>
-            <p className="text-gray-500">Profile Settings</p>
-          </div>
+        {/* Simplified Header without Image */}
+        <div className="mb-12 border-b border-gray-800 pb-8">
+          <h2 className="text-2xl font-medium text-orange-500">{formData.username || "User"}</h2>
+          <p className="text-gray-500">Edit your account details and privacy</p>
         </div>
 
-        {/* Form Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-8 mb-16">
           <div className="space-y-8">
             <div className="flex flex-col gap-3">
-              <label className="text-gray-300">Name</label>
+              <label className="text-gray-300 text-sm font-medium">Name</label>
               <input
                 type="text"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                className="bg-[#1b1c1d] border border-[#272727] rounded-md h-13 px-4 focus:outline-none"
+                value={formData.username}
+                onChange={(e) => handleInputChange('username', e.target.value)}
+                className="bg-[#1b1c1d] border border-[#272727] rounded-xl h-14 px-4 focus:outline-none focus:border-orange-500 transition-colors"
+                placeholder="Enter display name"
               />
             </div>
 
             <div className="flex flex-col gap-3">
-              <label className="text-gray-300">Privacy setting</label>
+              <label className="text-gray-300 text-sm font-medium">Privacy setting</label>
               <div className="relative">
                 <button
+                  type="button"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full bg-[#1b1c1d] border border-[#272727] rounded-md h-13 px-4 flex items-center justify-between"
+                  className="w-full bg-[#1b1c1d] border border-[#272727] rounded-xl h-14 px-4 flex items-center justify-between z-10"
                 >
-                  <span className="text-white uppercase">{formData.privacySetting}</span>
+                  <span className="text-white uppercase font-bold text-xs tracking-wider">{formData.privacy}</span>
                   <ChevronDown className={`w-5 h-5 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {isDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-[#1b1c1d] border border-[#272727] rounded-md z-20">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-[#1b1c1d] border border-[#272727] rounded-xl z-50 shadow-2xl overflow-hidden">
                     {['Public', 'Private'].map((opt) => (
                       <div 
                         key={opt}
                         onClick={() => handlePrivacySelect(opt)}
-                        className="px-4 py-3 hover:bg-[#272727] cursor-pointer"
+                        className="px-4 py-4 hover:bg-[#272727] cursor-pointer text-sm transition-colors"
                       >
                         {opt}
                       </div>
@@ -164,34 +142,49 @@ export default function Settings() {
 
           <div className="space-y-8 flex flex-col">
             <div className="flex flex-col gap-3">
-              <label className="text-gray-300">User Name</label>
-              <input
-                type="text"
-                value={formData.userName}
-                onChange={(e) => handleInputChange('userName', e.target.value)}
-                className="bg-[#1b1c1d] border border-[#272727] rounded-md h-13 px-4 focus:outline-none"
-              />
+              <label className="text-gray-300 text-sm font-medium">GitHub Link</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={formData.github}
+                  onChange={(e) => handleInputChange('github', e.target.value)}
+                  className="w-full bg-[#1b1c1d] border border-[#272727] rounded-xl h-14 pl-12 pr-4 focus:outline-none focus:border-orange-500 transition-colors"
+                  placeholder="https://github.com/username"
+                />
+                <Github className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              </div>
             </div>
 
             <div className="flex flex-col gap-3 grow">
-              <label className="text-gray-300">Bio</label>
+              <label className="text-gray-300 text-sm font-medium">Bio</label>
               <textarea
                 value={formData.bio}
                 onChange={(e) => handleInputChange('bio', e.target.value)}
-                className="bg-[#1b1c1d] border border-[#272727] rounded-md p-4 focus:outline-none resize-none h-full min-h-40"
+                className="bg-[#1b1c1d] border border-[#272727] rounded-xl p-4 focus:outline-none focus:border-orange-500 resize-none h-32 transition-colors"
+                placeholder="Write a short bio..."
               />
             </div>
           </div>
         </div>
 
-        {/* Save Button */}
-        <button 
-          onClick={handleSaveChanges}
-          disabled={loading}
-          className="bg-[#3B2217] hover:bg-[#4d2d1e] text-[#F3641F] font-medium px-10 py-3 rounded-md transition-colors"
-        >
-          {loading ? "Saving..." : "Save changes"}
-        </button>
+        <div className="flex gap-4 pb-20"> 
+          <button 
+            type="button"
+            onClick={handleSaveChanges}
+            disabled={loading}
+            className="bg-[#F3641F] hover:bg-orange-600 text-white font-bold px-10 py-4 rounded-full transition-all cursor-pointer disabled:opacity-50 active:scale-95 shadow-lg shadow-orange-500/20"
+          >
+            {loading ? "Saving..." : "Save changes"}
+          </button>
+          
+          <button 
+            type="button"
+            onClick={() => navigate("/profile")}
+            className="text-gray-500 hover:text-white font-medium px-6 py-4 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -7,12 +7,10 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyEmail from "./pages/auth/VerifyEmail";
 import ChangePassword from "./pages/auth/ChangePassword";
 import ProfileSetup from "./pages/auth/ProfileSetup";
-import NewUser from "./pages/user-profiles/NewUser";
 import PostSignup from "./pages/auth/PostSignup";
 import ProfileLayout from "./layouts/ProfileLayout";
 import UserProfile from "./pages/user-profiles/Profile";
 import VerifyNewUser from "./pages/auth/VerifyNewUser";
-// import PostDetails from "./components/Feed/PostDetails";
 import FriendsPage from "./pages/SearchPage";
 import CreatePost from "./pages/CreatePost";
 import MainLayout from "./layouts/MainLayout";
@@ -24,6 +22,7 @@ import GeneralLayout from "./layouts/generalLayout";
 import MessageLayout from "./layouts/MessageLayout";
 import EventDetails from "./pages/EventDetails";
 import Settings from "./pages/user-profiles/Settings";
+import OtherProfile from "./pages/user-profiles/OtherUsers";
 
 export default function App() {
   return (
@@ -41,6 +40,7 @@ export default function App() {
       {/* User Profiles */}
       <Route element={<ProfileLayout />}>
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/other-profiles/:userId" element={<OtherProfile />} />
       </Route>
 
        <Route path="/chats" element={<MessageLayout />} />
@@ -59,7 +59,6 @@ export default function App() {
 
       {/* App */}
       <Route element={<AppLayout />}>
-      <Route path="/new-user" element={<NewUser />} />
         <Route path="/search" element={<FriendsPage />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/posts/:postId" element={<Comments />} />

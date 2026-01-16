@@ -1,5 +1,6 @@
 // src/components/Feed/CommentBox.tsx
 import { useState, useEffect, useRef } from "react";
+import { getAuthHeader } from "../../utils/auth"; // 1. Import your helper
 
 const API_BASE_URL = "http://localhost:5001";
 
@@ -24,7 +25,8 @@ export default function CommentBox({ postId, onCommentCreated }: CommentBoxProps
     try {
       setSubmitting(true);
 
-      const token = localStorage.getItem("accessToken");
+      // 2. Use the central helper to get the Authorization header
+      const authHeader = getAuthHeader();
 
       const res = await fetch(
         `${API_BASE_URL}/api/posts/${postId}/comments`,
@@ -32,7 +34,7 @@ export default function CommentBox({ postId, onCommentCreated }: CommentBoxProps
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: token ? `Bearer ${token}` : "",
+            ...authHeader, // 3. Spread the header { Authorization: 'Bearer ...' }
           },
           body: JSON.stringify({ content: trimmed }),
         }
@@ -42,11 +44,18 @@ export default function CommentBox({ postId, onCommentCreated }: CommentBoxProps
       try {
         data = await res.json();
       } catch {
-        // non-JSON response; ignore
+        // non-JSON response
       }
 
       if (!res.ok) {
         console.error("Failed to add comment:", res.status, data);
+        
+        // 4. Handle 401 specifically for debugging
+        if (res.status === 401) {
+          alert("Your session has expired. Please log in again.");
+          return;
+        }
+
         alert(
           (data && (data.error || data.message)) ||
             `Failed to add comment (${res.status})`
@@ -75,7 +84,6 @@ export default function CommentBox({ postId, onCommentCreated }: CommentBoxProps
         placeholder="Post your reply"
         className="flex-1 bg-[#1A1A1A] border border-white/5 rounded-xl py-2 px-4 text-white focus:outline-none focus:border-[#FF5C00] cursor-text pointer-events-auto resize-none min-h-[40px]"
         onKeyDown={(e) => {
-          // Enter to submit, Shift+Enter for new line
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (text.trim() && !submitting) {

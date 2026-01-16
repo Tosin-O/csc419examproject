@@ -29,7 +29,7 @@ export default function ProfileLayout() {
       </div>
 
       {/* Main Scrollable Area */}
-      <main className="flex-1 flex justify-center overflow-y-auto w-full relative scrollbar-hide">
+      <main className="flex-1 flex justify-center overflow-y-auto w-full relative scrollbar-hide ">
         {/* Content Container */}
         <div className="w-full max-w-4xl pt-4 md:pt-6 px-4 pb-20 md:ml-24">
           <Outlet />
