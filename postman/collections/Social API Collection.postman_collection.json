@@ -120,6 +120,81 @@
               ],
               "cookie": [],
               "body": "{\n    \"message\": \"Registered. OTP sent to email.\"\n}"
+            },
+            {
+              "id": "21a44cc4-c260-4bca-8be4-4a11a1e53d81",
+              "name": "Register User",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"apampamardiyyah@gmail.com\",\r\n  \"password\": \"Password123!\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "44"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"2c-IPh+uDYLqgYoH5ABBLqLbT7ZFyY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 15 Jan 2026 18:33:55 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "responseTime": "2026-01-15T18:34:01.542Z",
+              "body": "{\n    \"message\": \"Registered. OTP sent to email.\"\n}"
             }
           ]
         },
@@ -924,74 +999,6 @@
           },
           "response": [
             {
-              "id": "98a89fee-7917-4191-9361-06b3e0cd25ac",
-              "name": "New Request",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n  \"bio\": \"I love coding\",\r\n  \"links\": [\"https://twitter.com/faruq\"],\r\n  \"privacy\": \"PUBLIC\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "http://localhost:5000/api/profile",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "5000",
-                  "path": [
-                    "api",
-                    "profile"
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Access-Control-Allow-Origin",
-                  "value": "*"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "266"
-                },
-                {
-                  "key": "ETag",
-                  "value": "W/\"10a-UZf+uZf/4xarDbcGaymKVwwA1Rg\""
-                },
-                {
-                  "key": "Date",
-                  "value": "Wed, 14 Jan 2026 14:42:43 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"id\": \"82aa67d2-e099-454d-8c85-f006a81ab6cf\",\n    \"userId\": \"da59830e-71ed-43bf-94e8-0fd7be65eb79\",\n    \"bio\": \"I love coding\",\n    \"links\": [\n        \"https://twitter.com/faruq\"\n    ],\n    \"photoUrl\": null,\n    \"privacy\": \"PUBLIC\",\n    \"createdAt\": \"2026-01-14T14:42:42.426Z\",\n    \"updatedAt\": \"2026-01-14T14:42:42.426Z\"\n}"
-            },
-            {
               "id": "029729c1-573b-4b58-a722-4f1296f5e295",
               "name": "Create User Profile",
               "originalRequest": {
@@ -1174,10 +1181,39 @@
           "name": "Add User Interest",
           "id": "ea688bcb-415a-479b-8416-dc6ecf5fd478",
           "request": {
-            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM4MTA2ZWRlLTAxNzgtNGU3Yy04MTI4LTczMDlhMzE5OWIzYiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4NTYyMzgxLCJleHAiOjE3Njg1NjMyODF9.bxolwgk8fB7QGq7dvo4Oo_2ovZMhvL5dLW4Ucb91O9g",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"interests\": [\"Coding\", \"Music\", \"Reading\"]\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": ""
+              "raw": "http://localhost:5000/api/profile/interests",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "profile",
+                "interests"
+              ]
             }
           },
           "response": [
@@ -1249,6 +1285,76 @@
               ],
               "cookie": [],
               "body": "{\n    \"message\": \"Interests saved successfully\"\n}"
+            },
+            {
+              "id": "6d3f324c-209a-4eb5-aacb-ae727c06bfb9",
+              "name": "Add User Interest",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"interests\": [\"Coding\", \"Music\", \"Reading\"]\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/profile/interests",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "profile",
+                    "interests"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "42"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"2a-lsPFsLqG0hsVxk2VpROctaLdaVU\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 16 Jan 2026 11:21:32 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "responseTime": "2026-01-16T11:21:38.299Z",
+              "body": "{\n    \"message\": \"Interests saved successfully\"\n}"
             }
           ]
         },
@@ -1295,82 +1401,6 @@
             }
           },
           "response": [
-            {
-              "id": "c0b3472e-414f-4917-b1c0-5c401911c4b9",
-              "name": "Upload Photo",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "",
-                      "type": "file",
-                      "src": [
-                        "/C:/Users/faruq/Pictures/psg.png"
-                      ]
-                    }
-                  ]
-                },
-                "url": {
-                  "raw": "http://localhost:5000/api/profile/photo",
-                  "protocol": "http",
-                  "host": [
-                    "localhost"
-                  ],
-                  "port": "5000",
-                  "path": [
-                    "api",
-                    "profile",
-                    "photo"
-                  ]
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "X-Powered-By",
-                  "value": "Express"
-                },
-                {
-                  "key": "Access-Control-Allow-Origin",
-                  "value": "*"
-                },
-                {
-                  "key": "Content-Security-Policy",
-                  "value": "default-src 'none'"
-                },
-                {
-                  "key": "X-Content-Type-Options",
-                  "value": "nosniff"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/html; charset=utf-8"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "1476"
-                },
-                {
-                  "key": "Date",
-                  "value": "Wed, 14 Jan 2026 14:51:47 GMT"
-                },
-                {
-                  "key": "Connection",
-                  "value": "keep-alive"
-                },
-                {
-                  "key": "Keep-Alive",
-                  "value": "timeout=5"
-                }
-              ],
-              "cookie": [],
-              "body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <meta charset=\"utf-8\">\n        <title>Error</title>\n    </head>\n    <body>\n        <pre>MulterError: Field name missing\n            <br> &nbsp; &nbsp;at abortWithCode (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\multer\\lib\\make-middleware.js:85:22)\n            <br> &nbsp; &nbsp;at Multipart.&lt;anonymous&gt; (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\multer\\lib\\make-middleware.js:113:37)\n            <br> &nbsp; &nbsp;at Multipart.emit (node:events:519:28)\n            <br> &nbsp; &nbsp;at HeaderParser.cb (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\busboy\\lib\\types\\multipart.js:358:14)\n            <br> &nbsp; &nbsp;at HeaderParser.push (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\busboy\\lib\\types\\multipart.js:162:20)\n            <br> &nbsp; &nbsp;at SBMH.ssCb [as _cb] (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\busboy\\lib\\types\\multipart.js:394:37)\n            <br> &nbsp; &nbsp;at feed (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\streamsearch\\lib\\sbmh.js:219:14)\n            <br> &nbsp; &nbsp;at SBMH.push (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\streamsearch\\lib\\sbmh.js:104:16)\n            <br> &nbsp; &nbsp;at Multipart._write (C:\\Users\\faruq\\Downloads\\PROJECT\\GroupM_CSC419Project\\backend\\node_modules\\busboy\\lib\\types\\multipart.js:567:19)\n            <br> &nbsp; &nbsp;at writeOrBuffer (node:internal/streams/writable:570:12)\n        </pre>\n    </body>\n</html>"
-            },
             {
               "id": "045f44fc-056f-4715-822f-6fe3e9af0945",
               "name": "Upload Photo",
@@ -1442,6 +1472,79 @@
               ],
               "cookie": [],
               "body": "{\n    \"photoUrl\": \"https://res.cloudinary.com/dkjeobqqm/image/upload/v1768433314/profiles/vmnhcz1zwnesjweqd5mx.png\"\n}"
+            },
+            {
+              "id": "f5000745-52a5-45bd-bf87-a123a37e02fd",
+              "name": "Upload Photo",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "photo",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/faruq/Downloads/coincircuithq_logo.jpg"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/profile/photo",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "profile",
+                    "photo"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "110"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"6e-cY2qBb+XrZ55rL4UJ4KvR0Fl7mw\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 16 Jan 2026 11:23:29 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "responseTime": "2026-01-16T11:23:38.083Z",
+              "body": "{\n    \"photoUrl\": \"https://res.cloudinary.com/dkjeobqqm/image/upload/v1768562610/profiles/p28k9xhhrob9grvcu5ez.jpg\"\n}"
             }
           ]
         },
@@ -1454,7 +1557,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4M2NiY2E1LWUxOWMtNDhiYi04MDczLTZjN2MxYmRlNTVmYiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4NDg0NjIxLCJleHAiOjE3Njg0ODU1MjF9.1r_m2GwCZWsiB7hnKUX3rhonGLsTvM0JRI005dVuVdo",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY4M2NiY2E1LWUxOWMtNDhiYi04MDczLTZjN2MxYmRlNTVmYiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4NDg2MTAxLCJleHAiOjE3Njg0ODcwMDF9.WIHQ2Ay7KR1WC8shAAK1TYrQhJsQjSbxoANWSz2o05c",
                   "type": "string"
                 }
               ]
@@ -1556,6 +1659,121 @@
               "body": "{\n    \"id\": \"b8293f29-5e9f-4f58-bc36-4237e1dce58d\",\n    \"userId\": \"f83cbca5-e19c-48bb-8073-6c7c1bde55fb\",\n    \"bio\": \"Backend developer\",\n    \"links\": {\n        \"github\": \"https://github.com/somto\"\n    },\n    \"photoUrl\": null,\n    \"privacy\": \"PRIVATE\",\n    \"avatarUrl\": null,\n    \"coverPhotoUrl\": null,\n    \"website\": null,\n    \"location\": null,\n    \"dateOfBirth\": null,\n    \"createdAt\": \"2026-01-15T12:18:18.332Z\",\n    \"updatedAt\": \"2026-01-15T14:08:39.261Z\"\n}"
             }
           ]
+        },
+        {
+          "name": "Update Users Profile",
+          "id": "3aeae23c-5ea0-4453-bf5f-23b5870da1ee",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/profile/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "profile",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4d932d65-9fe3-4ab4-90d6-64549d4f545e",
+              "name": "Update Users Profile",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"username\": \"Tosin Olutishe\",\r\n    \"bio\": \"I hate Advancement project and will like to graduate\",\r\n    \"links\": { \"github\": \"https://github.com/tosin\" },\r\n    \"privacy\": \"PRIVATE\"\r\n  }",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/profile/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "profile",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "495"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1ef-/wpPCgT4AxLCI5aD77pEnI6sDg0\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 16 Jan 2026 12:32:33 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "responseTime": "2026-01-16T12:32:38.398Z",
+              "body": "{\n    \"id\": \"9e5809a0-fb77-4914-9a20-52ee4be351be\",\n    \"userId\": \"4b1ffa0f-a306-4081-871a-71033fc4e9df\",\n    \"bio\": \"I hate Advancement project and will like to graduate\",\n    \"links\": {\n        \"github\": \"https://github.com/tosin\"\n    },\n    \"photoUrl\": \"https://res.cloudinary.com/dkjeobqqm/image/upload/v1768566470/profiles/ej0i4j4znifyqjrsdpko.jpg\",\n    \"privacy\": \"PRIVATE\",\n    \"avatarUrl\": null,\n    \"coverPhotoUrl\": null,\n    \"website\": null,\n    \"location\": null,\n    \"dateOfBirth\": null,\n    \"createdAt\": \"2026-01-16T12:12:33.223Z\",\n    \"updatedAt\": \"2026-01-16T12:32:31.355Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Image",
+          "id": "7823a6fa-b381-45fa-abcf-561d31196397",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/profile/photo",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "profile",
+                "photo"
+              ]
+            }
+          },
+          "response": []
         }
       ],
       "id": "08545e01-15c8-4fd9-80fb-55f52e625b7c"
@@ -2381,7 +2599,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEzMjZhOThhLWZiMGEtNDlmOC1iZGNkLTEwYWMwNzIyZDllOCIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4NDIxMjg1LCJleHAiOjE3Njg0MjIxODV9.u06Kmokjoibqv6l0x_2fyrVAoG3q49B9DTL4X_bB5mM",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRiMWZmYTBmLWEzMDYtNDA4MS04NzFhLTcxMDMzZmM0ZTlkZiIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4NTY2MDIxLCJleHAiOjE3Njg1NjY5MjF9.X5k0rGatprZsJGtk_3LERut5tYdI3-yhDQsVTcMb4Cg",
                   "type": "string"
                 }
               ]
@@ -2598,6 +2816,168 @@
               ],
               "cookie": [],
               "body": "{\n    \"mutualFriendsCount\": 0\n}"
+            }
+          ]
+        },
+        {
+          "name": "Search Logic",
+          "id": "e5a71e16-03fd-4260-b514-bd635c585e57",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "id": "979aacc3-5720-4d30-8535-ff462765069d",
+              "name": "Search Logic",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/profile/search?q=Faru&page=1&limit=3",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "profile",
+                    "search"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "Faru"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1020"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"3fc-tkM3Jntsd+RikHvsua9tx7nks84\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 16 Jan 2026 13:38:47 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "responseTime": "2026-01-16T13:38:50.166Z",
+              "body": "{\n    \"results\": [\n        {\n            \"id\": \"38106ede-0178-4e7c-8128-7309a3199b3b\",\n            \"email\": \"babajidefaruq7@gmail.com\",\n            \"username\": \"Faruq\",\n            \"passwordHash\": \"$2b$10$WQ3JxE/Oq3Gy3BPQV1LF2OHDi..xT3BDeQIRJ5pVwatDOGRbgiEDC\",\n            \"role\": \"USER\",\n            \"isEmailVerified\": true,\n            \"isActive\": true,\n            \"createdAt\": \"2026-01-16T11:12:15.910Z\",\n            \"updatedAt\": \"2026-01-16T11:19:58.051Z\",\n            \"profile\": {\n                \"photoUrl\": \"https://res.cloudinary.com/dkjeobqqm/image/upload/v1768565261/profiles/r32dlrokurhfc8qt4wzq.jpg\",\n                \"bio\": \"Backend developer and I love food\"\n            }\n        },\n        {\n            \"id\": \"4b1ffa0f-a306-4081-871a-71033fc4e9df\",\n            \"email\": \"babajidefaruq8@gmail.com\",\n            \"username\": \"Faruq Olami\",\n            \"passwordHash\": \"$2b$10$72Sq/ufWTgbfvcfQ1OUiwufwL7KANyjX2zBJEbXB6d5OSy2rWXagK\",\n            \"role\": \"USER\",\n            \"isEmailVerified\": true,\n            \"isActive\": true,\n            \"createdAt\": \"2026-01-16T11:53:45.600Z\",\n            \"updatedAt\": \"2026-01-16T12:35:05.385Z\",\n            \"profile\": {\n                \"photoUrl\": \"https://res.cloudinary.com/dkjeobqqm/image/upload/v1768566470/profiles/ej0i4j4znifyqjrsdpko.jpg\",\n                \"bio\": \"I hate Advancement project and will like to graduate in peace\"\n            }\n        }\n    ],\n    \"page\": 1,\n    \"limit\": 3,\n    \"total\": 2\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Search User Profile",
+          "id": "abd67945-283c-49de-85c3-e4d89c1d855f",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "id": "db32120e-6772-4cc1-8197-81b05ad9af22",
+              "name": "New Request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/profile/38106ede-0178-4e7c-8128-7309a3199b3b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "profile",
+                    "38106ede-0178-4e7c-8128-7309a3199b3b"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1056"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"420-RaOGlHUJT5KFH+rLyvlz16v0vFg\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 16 Jan 2026 13:39:57 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "responseTime": "2026-01-16T13:40:06.948Z",
+              "body": "{\n    \"id\": \"59edea42-0137-45d8-aa55-1b376253f259\",\n    \"userId\": \"38106ede-0178-4e7c-8128-7309a3199b3b\",\n    \"bio\": \"Backend developer and I love food\",\n    \"links\": {\n        \"github\": \"https://github.com/kim\"\n    },\n    \"photoUrl\": \"https://res.cloudinary.com/dkjeobqqm/image/upload/v1768565261/profiles/r32dlrokurhfc8qt4wzq.jpg\",\n    \"privacy\": \"PUBLIC\",\n    \"avatarUrl\": null,\n    \"coverPhotoUrl\": null,\n    \"website\": null,\n    \"location\": null,\n    \"dateOfBirth\": null,\n    \"createdAt\": \"2026-01-16T11:19:58.640Z\",\n    \"updatedAt\": \"2026-01-16T12:07:43.113Z\",\n    \"interests\": [\n        {\n            \"id\": \"5b19abc3-ba2f-48e5-98a9-274d1c6fb052\",\n            \"name\": \"Coding\",\n            \"profileId\": \"59edea42-0137-45d8-aa55-1b376253f259\"\n        },\n        {\n            \"id\": \"5c530934-b9e1-49f4-bbdc-ee8a0b1bf1ad\",\n            \"name\": \"Music\",\n            \"profileId\": \"59edea42-0137-45d8-aa55-1b376253f259\"\n        },\n        {\n            \"id\": \"c851a89e-87b7-4385-a8aa-8055a3cf46ac\",\n            \"name\": \"Reading\",\n            \"profileId\": \"59edea42-0137-45d8-aa55-1b376253f259\"\n        }\n    ],\n    \"user\": {\n        \"id\": \"38106ede-0178-4e7c-8128-7309a3199b3b\",\n        \"username\": \"Faruq\",\n        \"email\": \"babajidefaruq7@gmail.com\",\n        \"isEmailVerified\": true,\n        \"createdAt\": \"2026-01-16T11:12:15.910Z\",\n        \"_count\": {\n            \"followers\": 0,\n            \"following\": 0,\n            \"friends\": 0,\n            \"posts\": 0\n        }\n    }\n}"
             }
           ]
         }
