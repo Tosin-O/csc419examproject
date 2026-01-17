@@ -1,18 +1,19 @@
 import { Search, Users, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { getAuthHeader } from "../utils/auth"; // Import auth utility
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
+// Use the consistent API URL
+const API_BASE_URL = "https://groupm-csc419project.onrender.com";
 
 type Collective = {
   id: string | number;
   name: string;
   handle: string;
-  avatar_url?: string;
-  banner_url?: string;
+  avatar_url: string;
+  banner_url: string;
   description: string;
-  members_count?: number;
+  members_count: number;
 };
 
 export default function ExploreCollectives() {
@@ -28,11 +29,18 @@ export default function ExploreCollectives() {
         setLoading(true);
         setError(null);
 
+        // Standardized to use API_BASE_URL and corrected search endpoint logic
         const endpoint = query
-          ? `${GROUP_API_BASE}/api/groups/search?q=${encodeURIComponent(query)}`
-          : `${GROUP_API_BASE}/api/groups`;
+          ? `${API_BASE_URL}/api/groups/search?q=${encodeURIComponent(query)}`
+          : `${API_BASE_URL}/api/groups`;
 
-        const res = await fetch(endpoint);
+        const res = await fetch(endpoint, {
+          headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeader(), // Pass auth headers if required by your backend
+          },
+        });
+
         if (!res.ok) throw new Error(`Failed to load groups: ${res.status}`);
 
         const data = await res.json();
@@ -41,15 +49,15 @@ export default function ExploreCollectives() {
         const mappedData = data.map((group: any) => ({
           id: group.id,
           name: group.name,
-          description: group.description,
+          description: group.description || "No description provided.",
           // Map DB 'cover_image' to UI 'banner_url'
-          banner_url: group.cover_image || "https://picsum.photos/800/200",
-          // Map members count if it exists, otherwise 0
+          banner_url: group.cover_image || group.banner_url || "https://picsum.photos/800/200",
+          // Map members count
           members_count: group.members_count ?? 0,
-          // Fallback handle since it's not in the DB yet
-          handle: group.handle ?? `@group-${group.id}`,
-          // Avatar fallback using Dicebear
-          avatar_url: group.avatar_url ?? `https://api.dicebear.com/7.x/shapes/svg?seed=${group.name}`
+          // Handle slug/handle from DB
+          handle: group.handle || group.slug || `@group-${group.id}`,
+          // Avatar fallback
+          avatar_url: group.avatar_url || group.avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${group.name}`
         }));
 
         setCollectives(mappedData);
@@ -61,7 +69,12 @@ export default function ExploreCollectives() {
       }
     }
 
-    fetchGroups();
+    // Debounce search slightly to avoid hitting API on every keystroke
+    const timeoutId = setTimeout(() => {
+        fetchGroups();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
   }, [query]);
 
   return (
@@ -100,54 +113,64 @@ export default function ExploreCollectives() {
         {/* Collectives Grid */}
         {loading ? (
            <div className="flex items-center justify-center py-20">
-             <p className="text-gray-400 text-sm">Loading collectives...</p>
+             <p className="text-gray-400 text-sm animate-pulse">Syncing with database...</p>
            </div>
+        ) : error ? (
+            <div className="flex items-center justify-center py-20">
+                <p className="text-red-400 text-sm">{error}</p>
+            </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {collectives.map((collective) => (
-              <div
-                key={collective.id}
-                onClick={() => navigate(`/collectives/${collective.id}`)}
-                className="group bg-zinc-900/30 border border-white/5 rounded-3xl overflow-hidden hover:bg-zinc-900/60 transition-all cursor-pointer"
-              >
-                <div className="h-24 w-full bg-zinc-800 relative">
-                  <img
-                    src={collective.banner_url}
-                    className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-                    alt="Banner"
-                  />
-                </div>
-
-                <div className="px-5 pb-6">
-                  <div className="relative -mt-8 flex justify-between items-end mb-4">
+            {collectives.length > 0 ? (
+              collectives.map((collective) => (
+                <div
+                  key={collective.id}
+                  onClick={() => navigate(`/collectives/${collective.id}`)}
+                  className="group bg-zinc-900/30 border border-white/5 rounded-3xl overflow-hidden hover:bg-zinc-900/60 transition-all cursor-pointer"
+                >
+                  <div className="h-24 w-full bg-zinc-800 relative">
                     <img
-                      src={collective.avatar_url}
-                      className="w-16 h-16 rounded-2xl border-4 border-[#161718] object-cover shadow-lg"
-                      alt={collective.name}
+                      src={collective.banner_url}
+                      className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+                      alt="Banner"
                     />
-                    <div className="flex items-center gap-1.5 bg-[#161718] px-3 py-1 rounded-full border border-white/5 text-[10px] text-gray-400 font-medium">
-                      <Users size={12} className="text-[#FF5C00]" />
-                      {collective.members_count?.toLocaleString()}
+                  </div>
+
+                  <div className="px-5 pb-6">
+                    <div className="relative -mt-8 flex justify-between items-end mb-4">
+                      <img
+                        src={collective.avatar_url}
+                        className="w-16 h-16 rounded-2xl border-4 border-[#161718] object-cover shadow-lg"
+                        alt={collective.name}
+                      />
+                      <div className="flex items-center gap-1.5 bg-[#161718] px-3 py-1 rounded-full border border-white/5 text-[10px] text-gray-400 font-medium">
+                        <Users size={12} className="text-[#FF5C00]" />
+                        {collective.members_count.toLocaleString()}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <h3 className="font-bold text-lg group-hover:text-[#FF5C00] transition-colors">
+                        {collective.name}
+                      </h3>
+                      <p className="text-xs text-gray-500">{collective.handle}</p>
+                    </div>
+
+                    <p className="mt-3 text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                      {collective.description}
+                    </p>
+
+                    <div className="mt-5 flex items-center text-[#FF5C00] text-xs font-bold gap-2">
+                      View Collective <ArrowRight size={14} />
                     </div>
                   </div>
-
-                  <div className="space-y-1">
-                    <h3 className="font-bold text-lg group-hover:text-[#FF5C00] transition-colors">
-                      {collective.name}
-                    </h3>
-                    <p className="text-xs text-gray-500">{collective.handle}</p>
-                  </div>
-
-                  <p className="mt-3 text-xs text-gray-400 line-clamp-2 leading-relaxed">
-                    {collective.description}
-                  </p>
-
-                  <div className="mt-5 flex items-center text-[#FF5C00] text-xs font-bold gap-2">
-                    View Collective <ArrowRight size={14} />
-                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+                <div className="col-span-full text-center py-10">
+                    <p className="text-gray-500">No collectives match your search.</p>
+                </div>
+            )}
           </div>
         )}
       </div>
