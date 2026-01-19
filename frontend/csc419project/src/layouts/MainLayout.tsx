@@ -32,11 +32,13 @@ const MainLayout: React.FC = () => {
         {/* Desktop Content Area */}
         <div className="flex-1 flex justify-center min-w-0">
 
-          {/* Feed (Shifted Further Right) */}
-          <main className="
-            w-full max-w-2xl min-w-0 border-r border-gray-800
-            lg:ml-24 xl:ml-32 2xl:ml-40
-          ">
+          {/* Feed (Shifted Right) */}
+          <main
+            className="
+              w-full max-w-2xl min-w-0 border-r border-gray-800
+              lg:ml-24 xl:ml-32 2xl:ml-40
+            "
+          >
             <div className="pt-10 px-4">
               <Feed />
             </div>
@@ -62,10 +64,12 @@ const MainLayout: React.FC = () => {
       {/* ================= NOTIFICATIONS ================= */}
       {isNotificationOpen && (
         <>
+          {/* Notification Panel */}
           <div
             className="
-              fixed top-0 left-0 h-screen z-50 bg-dark border-r border-gray-800
-              w-80 sm:w-96 transition-all
+              fixed top-0 h-screen z-50 bg-dark border-r border-gray-800
+              w-80 sm:w-96 transition-transform duration-300
+              left-0 lg:left-20 xl:lg:left-64
             "
           >
             <NotificationSidebar
@@ -74,9 +78,9 @@ const MainLayout: React.FC = () => {
             />
           </div>
 
-          {/* Backdrop */}
+          {/* Backdrop (Mobile Only) */}
           <div
-            className="fixed inset-0 bg-black/60 z-40"
+            className="fixed inset-0 bg-black/60 z-40 lg:hidden"
             onClick={() => setIsNotificationOpen(false)}
           />
         </>
